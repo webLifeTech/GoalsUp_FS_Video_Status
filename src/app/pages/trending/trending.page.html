@@ -1,0 +1,75 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Trending</ion-title>
+    <ion-buttons slot="end">
+      <!-- <ion-button (click)="gs.quotes()">
+        <ion-icon slot="icon-only" color="tertiary" src="assets/icon/Quotes.svg"></ion-icon>
+      </ion-button> -->
+      <!-- <ion-button (click)="gs.languagePopup()">
+        <ion-icon slot="icon-only" color="tertiary" name="language-outline"></ion-icon>
+      </ion-button> -->
+      <ion-button routerLink="/faverite" (click)="admobS.rendomAdShow()">
+        <ion-icon slot="icon-only" color="danger" name="heart"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="!gs.isAndroid11" routerLink="/download" (click)="admobS.rendomAdShow()">
+        <ion-icon slot="icon-only" name="download-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light" [scrollEvents]="true" (ionScroll)="onScroll($event)" #content>
+  <ion-refresher color="light" mode="ios" slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content refreshingSpinner="lines" style="background-color: #f4f5f8;"></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid fixed>
+    <ion-row>
+      <ng-container *ngIf="allTrendingVideos.length">
+        <ion-col class="ion-no-padding" size="6" *ngFor="let item of allTrendingVideos; let inx = index">
+          <ion-card (click)="goVideoSlides(allTrendingVideos, inx)" class="ion-no-margin img_card">
+            <ion-img [src]="item.video_thumb" alt="Image"></ion-img>
+            <div class="img_ovarlay">
+              <p>
+                <b>{{item.language_name}}</b> - {{item.user_name}}
+              </p>
+            </div>
+          </ion-card>
+        </ion-col>
+      </ng-container>
+      <ion-grid fixed *ngIf="!allTrendingVideos.length && isSpinner">
+        <ion-row>
+          <ion-col size="6" *ngFor="let item of [1,2,3,4,5,6,7,8]">
+            <ion-card class="ion-no-margin img_card">
+              <div class="custom-skeleton" style="padding: 6px;">
+                <ion-skeleton-text animated style="width: 100%;margin: auto;border-radius: 10px;height: 254px;">
+                </ion-skeleton-text>
+                <ion-skeleton-text animated style="margin-top: 18px;"></ion-skeleton-text>
+              </div>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ng-container *ngIf="!allTrendingVideos.length && !isSpinner">
+        <ion-col size="12">
+          <p class="ion-text-center">
+            No Videos!
+          </p>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+  </ion-grid>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isShown">
+    <ion-fab-button mini (click)="scrollToTop()" color="secondary" size="small" class="scroll_btn">
+      <ion-icon name="arrow-up-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-infinite-scroll color="light" threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content color="light" loadingSpinner="crescent" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

@@ -1,0 +1,58 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Quotes</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="languagePopup()">
+        <ion-icon slot="icon-only" color="tertiary" name="language-outline"></ion-icon>
+      </ion-button>
+      <ion-button routerLink="/quotes-faverite">
+        <ion-icon slot="icon-only" color="danger" name="heart"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar color="primary" *ngIf="allQuotCatList.length">
+    <ion-segment (ionChange)="segmentChanged($event)" color="light" scrollable aria-selected="true"
+      [value]="allQuotCatList[0].category_id">
+      <ng-container *ngFor="let item of allQuotCatList">
+        <ion-segment-button color="light" [value]="item.category_id">
+          <span
+            style="background: #1c142b;height: 60px;width: 60px;display: flex;align-items: center;justify-content: center;font-size: 27px;border-radius: 60px;">
+            <img [src]="item.category_thumb" alt="Image" height="34px" width="34px">
+          </span>
+          <ion-label style="font-size: 10px;margin-top: 2px;">{{item.category_name}}</ion-label>
+        </ion-segment-button>
+      </ng-container>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light" [scrollEvents]="true" (ionScroll)="onScroll($event)" #content>
+  <ion-row>
+    <ion-col size="6" *ngFor="let item of allQuotesList; let inx = index">
+      <ion-card class="ion-no-margin img_card" (click)="goQuotesSlides(allQuotesList,inx)" style="height: 243px;">
+        <ion-img [src]="item.quotes_thumb" alt="Image"></ion-img>
+        <div class="img_ovarlay" style="background: linear-gradient(transparent, rgb(0 0 0 / 22%));">
+        </div>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <p *ngIf="!allQuotesList.length && !isSpinner" class="ion-text-center" style="margin-top: 100px;">
+    <ion-text>
+      No Data
+    </ion-text>
+  </p>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isShown">
+    <ion-fab-button mini (click)="scrollToTop()" color="secondary" size="small" class="scroll_btn">
+      <ion-icon name="arrow-up-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content>
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

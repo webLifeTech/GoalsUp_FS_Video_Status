@@ -1,0 +1,277 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Profile</ion-title>
+    <ion-buttons slot="end">
+      <!-- <ion-button (click)="gs.quotes()">
+        <ion-icon slot="icon-only" color="tertiary" src="assets/icon/Quotes.svg"></ion-icon>
+      </ion-button> -->
+      <ion-button (click)="gs.languagePopup()">
+        <ion-icon slot="icon-only" color="tertiary" name="language-outline"></ion-icon>
+      </ion-button>
+      <!-- <ion-button routerLink="/faverite" (click)="admobS.rendomAdShow()">
+        <ion-icon slot="icon-only" color="danger" name="heart"></ion-icon>
+      </ion-button> -->
+      <ion-button *ngIf="!gs.isAndroid11" routerLink="/download" (click)="admobS.rendomAdShow()">
+        <ion-icon slot="icon-only" name="download-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light" [scrollEvents]="true" (ionScroll)="onScroll($event)" #content>
+
+  <!-- If User Not Login -->
+  <ion-grid class="profile-sect" *ngIf="gs.userData == null || gs.userData && !gs.userData.user_id">
+    <ion-row style="opacity: 0.4;pointer-events: none;">
+      <ion-col size="12">
+        <ul>
+          <li>
+            <img src="assets/avatar.png" />
+          </li>
+          <li>
+            <h5 style="height: 9px;width: 120px;background: #cfcfcf;"></h5>
+            <h5 style="height: 9px;width: 120px;background: #cfcfcf;"></h5>
+          </li>
+        </ul>
+      </ion-col>
+      <ion-col size="12">
+        <ion-segment [(ngModel)]="profileFeed">
+          <ion-segment-button value="myvideo">
+            <ion-icon name="film-outline"></ion-icon>
+          </ion-segment-button>
+          <ion-segment-button value="faverite">
+            <ion-icon name="heart-outline"></ion-icon>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-col>
+      <ion-col size="12">
+        <div class="ion-text-center" style="margin-top: 60px;margin-bottom: 30px;">
+          <ion-text>
+            No Videos!
+          </ion-text>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12" class="ion-text-center ion-padding-top">
+        <ion-button (click)="login()" type="submit" shape="round" class="ion-padding-horizontal" color="secondary"
+          style="height: 50px;width: 170px;">
+          Login Now
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- If User Login -->
+  <section *ngIf="gs.userData && gs.userData.user_id" class="profile-sect">
+    <ion-row>
+      <ion-col size="12">
+        <ul>
+          <li>
+            <img *ngIf="gs.userData.user_profile != ''" [src]="gs.userData.user_profile" />
+            <img *ngIf="gs.userData.user_profile == ''" src="assets/avatar.png" />
+          </li>
+          <li>
+            <h5>{{gs.userData.user_name}}</h5>
+            <ion-button class="ion-text-capitalize edit-btn" expand="block" fill="outline" (click)="editProfile()">
+              Edit Profile
+            </ion-button>
+          </li>
+        </ul>
+      </ion-col>
+
+
+      <ion-col size="12" style="display: flex;text-align: center;justify-content: center">
+        <ion-fab *ngIf="gs.userData.user_instagram" style="position: relative">
+          <ion-fab-button [href]="gs.userData.user_instagram" color="secondary" size="small">
+            <ion-icon name="logo-instagram"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+        <ion-fab *ngIf="gs.userData.user_telegram" style="position: relative">
+          <ion-fab-button [href]="gs.userData.user_telegram" color="secondary" size="small">
+            <ion-icon name="send-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+        <ion-fab *ngIf="gs.userData.user_youtube" style="position: relative">
+          <ion-fab-button [href]="gs.userData.user_youtube" color="secondary" size="small">
+            <ion-icon name="logo-youtube"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+      </ion-col>
+
+
+      <ion-col size="12">
+        <ion-segment [(ngModel)]="profileFeed">
+          <ion-segment-button (click)="admobS.rendomAdShow()" value="myvideo">
+            <ion-icon name="film-outline"></ion-icon>
+          </ion-segment-button>
+          <ion-segment-button (click)="admobS.rendomAdShow()" value="faverite">
+            <ion-icon name="heart-outline"></ion-icon>
+          </ion-segment-button>
+        </ion-segment>
+      </ion-col>
+
+
+      <ion-col size="12">
+        <section class="feeds-sect" *ngIf="profileFeed == 'myvideo'">
+          <ion-row *ngIf="!isSpinner && allMyVideos.videoData && allMyVideos.videoData.length">
+            <ng-container *ngFor="let item of allMyVideos.videoData;let inx = index">
+              <ion-col size="4" (click)="goVideoSlides(allMyVideos.videoData, inx)">
+                <ion-img [src]="item.video_thumb" style="height: 205px;border: 1px solid #535c6a;object-fit: cover;">
+                </ion-img>
+              </ion-col>
+            </ng-container>
+          </ion-row>
+          <ion-row *ngIf="!isSpinner && allMyVideos.videoData && !allMyVideos.videoData.length">
+            <!-- <ion-col size="12">
+              <div class="ion-text-center" style="margin-top: 60px;">
+                <ion-text>
+                  No Videos!
+                </ion-text>
+              </div>
+            </ion-col> -->
+            <ion-col size="12" class="ion-text-center ion-padding-top">
+              <ion-button (click)="uploadVideo()" type="submit" shape="round" class="ion-padding-horizontal"
+                color="secondary" style="height: 50px;width: 270px;margin-top: 60px">
+                <ion-icon slot="start" name="add" style="font-size: 28px;"></ion-icon>
+                <b>Video Upload Now</b>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </section>
+
+
+        <section class="feeds-sect" *ngIf="profileFeed == 'faverite'">
+          <ion-row *ngIf="gs.myFavVideos.length">
+            <ion-col size="6" *ngFor="let vidRow of gs.myFavVideos;let inx = index">
+              <ion-card color="light"
+                style="margin-bottom: 2px;border: 2px solid white;border-radius: 10px;height: 300px;"
+                class="ion-no-margin ion-no-padding" (click)="goVideoSlides(gs.myFavVideos, inx)">
+                <img [src]="vidRow.video_thumb" style="height: 235px;width: 100%;object-fit: cover" />
+                <ion-row class="bottum_menu">
+                  <ion-col class="ion-align-items-center" size="12" style="display: flex;">
+                    <ion-fab>
+                      <ion-fab-button (click)="viaVideoShare(vidRow);$event.stopPropagation()" color="light"
+                        size="small">
+                        <ion-icon name="share-social-outline"></ion-icon>
+                      </ion-fab-button>
+                    </ion-fab>
+                    <span style="margin-left: auto;">
+                      <ion-fab>
+                        <ion-fab-button (click)="unFavConfirm(vidRow.video_id);$event.stopPropagation()" fill="outline"
+                          color="light" size="small">
+                          <ion-icon name="heart"></ion-icon>
+                        </ion-fab-button>
+                      </ion-fab>
+                    </span>
+                  </ion-col>
+                </ion-row>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <!-- <p *ngIf="!gs.myFavVideos.length" class="ion-text-center" style="margin-top: 100px;">
+            <ion-text>
+              No Faverite Video
+            </ion-text>
+          </p> -->
+          <ion-row *ngIf="!gs.myFavVideos.length">
+            <ion-col size="12" class="ion-text-center ion-padding-top">
+              <ion-button (click)="addFaverite()" type="submit" shape="round" class="ion-padding-horizontal"
+                color="secondary" style="height: 50px;width: 270px;margin-top: 60px">
+                <ion-icon slot="start" name="heart-outline" style="font-size: 28px;"></ion-icon>
+                <b>Add Faverite</b>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </section>
+      </ion-col>
+    </ion-row>
+  </section>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isShown">
+    <ion-fab-button mini (click)="scrollToTop()" color="secondary" size="small" class="scroll_btn">
+      <ion-icon name="arrow-up-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content>
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+<!-- <ion-header class="ion-no-border">
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>For you</ion-title>
+    <ion-buttons slot="end">
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light" [scrollEvents]="true" (ionScroll)="onScroll($event)" #content>
+  <section class="">
+    <ion-grid fixed>
+      <ion-row class="">
+        <ion-col size="6">
+          <ion-card button routerLink="/download" (click)="admobS.rendomAdShow()" class="ion-no-margin ion-text-center main_card">
+            <ion-icon style="font-size: 40px;margin: 18px auto;" color="success" name="bookmark-outline">
+            </ion-icon>
+            <p class="ion-text-capitalize card-labal">
+              <b>Saved</b>
+            </p>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6">
+          <ion-card button routerLink="/faverite" (click)="admobS.rendomAdShow()" class="ion-no-margin ion-text-center main_card">
+            <ion-icon style="font-size: 40px;margin: 18px auto;" color="success" name="heart-outline">
+            </ion-icon>
+            <p class="ion-text-capitalize card-labal">
+              <b>Faverite</b>
+            </p>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6">
+          <ion-card button (click)="gs.languagePopup()" class="ion-no-margin ion-text-center main_card">
+            <ion-icon style="font-size: 40px;margin: 18px auto;" color="success" name="language-outline">
+            </ion-icon>
+            <p class="ion-text-capitalize card-labal">
+              <b>Language</b>
+            </p>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6">
+          <ion-card button routerLink="/privacy-police" class="ion-no-margin ion-text-center main_card">
+            <ion-icon style="font-size: 40px;margin: 18px auto;" color="success" name="lock-closed-outline">
+            </ion-icon>
+            <p class="ion-text-capitalize card-labal">
+              <b>Privacy Policy</b>
+            </p>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6">
+          <ion-card button (click)="gs.rateApp()" class="ion-no-margin ion-text-center main_card">
+            <ion-icon style="font-size: 40px;margin: 18px auto;" color="success" name="star-outline">
+            </ion-icon>
+            <p class="ion-text-capitalize card-labal">
+              <b>Rate Us</b>
+            </p>
+          </ion-card>
+        </ion-col>
+        <ion-col size="6">
+          <ion-card button (click)="gs.appShare()" class="ion-no-margin ion-text-center main_card">
+            <ion-icon style="font-size: 40px;margin: 18px auto;" color="success" name="share-social-outline">
+            </ion-icon>
+            <p class="ion-text-capitalize card-labal">
+              <b>Share App</b>
+            </p>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </section>
+</ion-content> -->

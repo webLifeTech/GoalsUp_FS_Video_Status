@@ -1,0 +1,89 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Category</ion-title>
+    <!-- Discover -->
+    <ion-buttons slot="end">
+      <!-- <ion-button (click)="gs.quotes()">
+        <ion-icon slot="icon-only" color="tertiary" src="assets/icon/Quotes.svg"></ion-icon>
+      </ion-button> -->
+      <!-- <ion-button (click)="gs.languagePopup()">
+        <ion-icon slot="icon-only" color="tertiary" name="language-outline"></ion-icon>
+      </ion-button> -->
+      <ion-button routerLink="/faverite" (click)="admobS.rendomAdShow()">
+        <ion-icon slot="icon-only" color="danger" name="heart"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="!gs.isAndroid11" routerLink="/download">
+        <ion-icon slot="icon-only" color="dark" name="download-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <!-- <ion-toolbar color="light">
+    <ion-searchbar mode="ios" [(ngModel)]="searchModel" placeholder="Search Favorites"></ion-searchbar>
+  </ion-toolbar> -->
+</ion-header>
+
+<ion-content color="light" [scrollEvents]="true" (ionScroll)="onScroll($event)" #content>
+  <!-- <ng-container *ngFor="let item of allCategoryList">
+    <ion-list-header style="border-left: 4px solid #ea2c7f;margin: 3px;">
+      <ion-label>{{item.category_name}}</ion-label>
+      <ion-button (click)="getVideoListByCategory(item.category_id)">See All</ion-button>
+    </ion-list-header>
+    <div *ngIf="item.videoData.length" class="scroll_div">
+      <ng-container class="" *ngFor="let Row of item.videoData;let inx = index">
+        <img (click)="goVideoSlides(item.videoData,item.category_id, inx)" [src]="Row.video_thumb" alt=""
+          style="width: 120px;margin: 2px;object-fit: cover;border: 1px solid #717171;">
+      </ng-container>
+    </div>
+  </ng-container> -->
+
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="12">
+        <ng-container *ngFor="let item of allCategoryList">
+          <ion-item color="light" class="costom_item costum_border" lines="none" button
+            (click)="getVideoListByCategory(item.category_id)">
+            <ion-avatar slot="start">
+              <img [src]="item.category_logo">
+            </ion-avatar>
+            <ion-label class="ion-text-lowercase">
+              #{{item.category_name}}
+            </ion-label>
+          </ion-item>
+        </ng-container>
+      </ion-col>
+      <!-- <ion-col size="6" *ngFor="let item of allCategoryList">
+        <ion-card (click)="goVideoSlides(item)" class="ion-no-margin costum_card">
+          <ion-card-content>
+            <div class="ion-text-center">
+              <img [src]="item.category_logo" alt="" width="45px">
+              <h2 style="color: rgb(255, 255, 255);font-weight: bold;margin-top: 16px;">#{{item.category_name}}</h2>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col> -->
+    </ion-row>
+  </ion-grid>
+  <ng-container *ngFor="let item of allCategoryList">
+    <ng-container *ngIf="!allCategoryList.length && !isSpinner">
+      <ion-col size="12">
+        <p class="ion-text-center">
+          No Videos!
+        </p>
+      </ion-col>
+    </ng-container>
+  </ng-container>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isShown">
+    <ion-fab-button mini (click)="scrollToTop()" color="secondary" size="small" class="scroll_btn">
+      <ion-icon name="arrow-up-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content>
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

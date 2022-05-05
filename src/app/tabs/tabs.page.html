@@ -1,0 +1,34 @@
+<ion-tabs>
+
+  <ion-tab-bar color="light" slot="bottom">
+    <ion-tab-button tab="home">
+      <ion-icon style="font-size: 28px;" name="home-outline"></ion-icon>
+      <ion-label>Home</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="discover" (click)="admobS.rendomAdShow()">
+      <ion-icon style="font-size: 28px;" name="search-outline"></ion-icon>
+      <ion-label>Category</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button>
+    </ion-tab-button>
+
+    <ion-tab-button tab="trending" (click)="admobS.rendomAdShow()">
+      <ion-icon style="font-size: 28px;" name="flame-outline"></ion-icon>
+      <!-- <img slot="start" src="assets/icon/Trending.svg" width="28px" alt="" /> -->
+      <ion-label>Trending</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="profile">
+      <ion-icon style="font-size: 28px;" name="person-outline"></ion-icon>
+      <ion-label>Profile</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+
+</ion-tabs>
+<ion-fab vertical="bottom" horizontal="center" slot="fixed">
+  <ion-fab-button (click)="upload()" color="secondary">
+    <ion-icon style="font-size: 28px;" name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

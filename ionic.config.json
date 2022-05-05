@@ -1,0 +1,7 @@
+{
+  "name": "Android11-API-Working",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

@@ -1,0 +1,38 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="secondary">
+    <ion-title class="ion-text-center"><b>Full Screen Video status</b></ion-title>
+    <!-- <ion-buttons slot="end">
+      <ion-button (click)="gs.languagePopup()">
+        <ion-icon slot="icon-only" color="tertiary" name="language-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons> -->
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light">
+  <!-- <div class="overlay"></div> -->
+  <ion-list>
+    <ion-list-header>
+      <b style="font-size: 16px;">Video Status Languages</b>
+    </ion-list-header>
+  </ion-list>
+  <ion-grid fixed>
+    <ion-row class="" *ngIf="gs.allVideoLanguage.length">
+      <ion-col size="6" *ngFor="let item of this.gs.allVideoLanguage">
+        <ion-card button class="ion-no-margin ion-text-center main_card">
+          <ion-item lines="none">
+            <ion-label>{{item.language_name}}</ion-label>
+            <ion-checkbox color="success" slot="end" [(ngModel)]="item.isChecked" [value]="item.language_id">
+            </ion-checkbox>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+      <ion-col size="12" class="ion-text-center ion-padding-top">
+        <ion-button class="ion-padding-horizontal" (click)="save()" color="secondary"
+          style="height: 50px;width: 170px;">
+          Save
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

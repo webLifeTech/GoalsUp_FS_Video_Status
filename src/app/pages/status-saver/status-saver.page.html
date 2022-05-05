@@ -1,0 +1,97 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Status saver</ion-title>
+  </ion-toolbar>
+  <!-- <ion-toolbar color="primary">
+    <ion-segment [(ngModel)]="downloadTab" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="videos">
+        <ion-label>Videos</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="quotes">
+        <ion-label></ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar> -->
+</ion-header>
+
+<ion-content color="light" [scrollEvents]="true" (ionScroll)="onScroll($event)" #content>
+  <ion-grid fixed>
+    <!-- For videos -->
+    <section class="feeds-sect" *ngIf="downloadTab == 'videos'">
+      <ion-row *ngIf="gs.videos.length">
+        <ion-col size="6" *ngFor="let vidRow of gs.videos; let index = index">
+          <!-- <ion-card (click)="goVideoSlides()" class="ion-no-margin img_card">
+            <ion-img [src]="vidRow.thumb" alt="Image"></ion-img> -->
+          <ion-card color="primary"
+            style="margin-bottom: 2px;border: 2px solid white;border-radius: 10px;height: 300px;"
+            class="ion-no-margin ion-no-padding" (click)="goVideoSlides(index)">
+            <ion-img [src]="vidRow.thumb" style="height: 235px;width: 100%;object-fit: cover"></ion-img>
+            <div class="img_ovarlay">
+            </div>
+            <ion-row class="bottum_menu">
+              <ion-col class="ion-align-items-center" size="12" style="display: flex;">
+                <span style="margin-left: auto;">
+                  <ion-fab>
+                    <ion-fab-button (click)="delete('video',index);$event.stopPropagation()" fill="outline"
+                      color="primary" size="small">
+                      <ion-icon name="trash-outline"></ion-icon>
+                    </ion-fab-button>
+                  </ion-fab>
+                </span>
+              </ion-col>
+            </ion-row>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      <p *ngIf="!gs.videos.length && !gs.isAndroid11" class="ion-text-center" style="margin-top: 100px;">
+        <ion-text>
+          No status
+        </ion-text>
+      </p>
+      <p *ngIf="!gs.videos.length && gs.isAndroid11" class="ion-text-center" style="margin-top: 100px;">
+        <ion-text>
+          Comming soon
+        </ion-text>
+      </p>
+    </section>
+
+    <!-- For Quotes -->
+    <!-- <section class="feeds-sect" *ngIf="downloadTab == 'quotes'">
+      <ion-row *ngIf="gs.images.length">
+        <ion-col size="6" *ngFor="let item of gs.images; let index = index">
+          <ion-card color="primary"
+            style="margin-bottom: 2px;border: 2px solid white;border-radius: 10px;height: 300px;"
+            class="ion-no-margin ion-no-padding" (click)="goQuotesSlides(index)">
+            <ion-img src="{{item['nativeURL']}}" style="height: 235px;width: 100%;object-fit: cover"></ion-img>
+            <ion-row class="bottum_menu">
+              <ion-col class="ion-align-items-center" size="12" style="display: flex;">
+                <span style="margin-left: auto;">
+                  <ion-fab>
+                    <ion-fab-button (click)="delete('image',index);$event.stopPropagation()" fill="outline"
+                      color="primary" size="small">
+                      <ion-icon name="trash-outline"></ion-icon>
+                    </ion-fab-button>
+                  </ion-fab>
+                </span>
+              </ion-col>
+            </ion-row>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      <p *ngIf="!gs.images.length" class="ion-text-center" style="margin-top: 100px;">
+        <ion-text>
+          No Download Quotes
+        </ion-text>
+      </p>
+    </section> -->
+  </ion-grid>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isShown">
+    <ion-fab-button mini (click)="scrollToTop()" color="secondary" size="small" class="scroll_btn">
+      <ion-icon name="arrow-up-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

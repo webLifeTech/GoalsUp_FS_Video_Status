@@ -1,0 +1,48 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="light">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Favorite</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="light" [scrollEvents]="true" (ionScroll)="onScroll($event)" #content>
+  <ion-row *ngIf="gs.myFavVideos.length">
+    <ion-col size="6" *ngFor="let vidRow of gs.myFavVideos;let inx = index">
+      <ion-card color="light" style="margin-bottom: 2px;border: 2px solid white;border-radius: 10px;height: 300px;"
+        class="ion-no-margin ion-no-padding" (click)="goVideoSlides(gs.myFavVideos, inx)">
+        <img [src]="vidRow.video_thumb" style="height: 235px;width: 100%;object-fit: cover" />
+        <ion-row class="bottum_menu">
+          <ion-col class="ion-align-items-center" size="12" style="display: flex;">
+            <ion-fab>
+              <ion-fab-button (click)="viaVideoShare(vidRow);$event.stopPropagation()" color="light" size="small">
+                <ion-icon name="share-social-outline"></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+            <span style="margin-left: auto;">
+              <ion-fab>
+                <ion-fab-button (click)="unFavConfirm(vidRow.video_id);$event.stopPropagation()" fill="outline"
+                  color="light" size="small">
+                  <ion-icon name="heart"></ion-icon>
+                </ion-fab-button>
+              </ion-fab>
+            </span>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <p *ngIf="!gs.myFavVideos.length" class="ion-text-center" style="margin-top: 100px;">
+    <ion-text>
+      No Favorite Video
+    </ion-text>
+  </p>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isShown">
+    <ion-fab-button mini (click)="scrollToTop()" color="secondary" size="small" class="scroll_btn">
+      <ion-icon name="arrow-up-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>
